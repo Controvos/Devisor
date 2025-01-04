@@ -83,6 +83,8 @@ app.post('/login', async (req, res) => {
     }
 });
 
+
+//////////////////////////////////////////////////////////////
 // Dashboard route
 app.get('/dashboard', async (req, res) => {
   if (!req.session.user) {
@@ -146,6 +148,7 @@ app.get('/logout', (req, res) => {
     });
 });
 
+//////////////////////////////////////////////////////////////
 // Routes for managing containers via daemon
 app.post('/instances/create', async (req, res) => {
     try {
