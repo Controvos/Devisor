@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Node</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body>
+
+    <h1 class="text-2xl font-bold mb-4">Edit Node</h1>
+
+    <form action="/admin/nodes/edit/<%= node._id %>" method="POST" class="bg-white shadow-md rounded-lg p-6">
+        <div class="mb-4">
+            <label for="name" class="block text-gray-700 font-medium mb-2">Node Name</label>
+            <input type="text" id="name" name="name" value="<%= node.name %>" class="w-full border border-gray-300 rounded-lg p-2" required>
+        </div>
+
+        <div class="mb-4">
+            <label for="ipAddress" class="block text-gray-700 font-medium mb-2">IP Address</label>
+            <input type="text" id="ipAddress" name="ipAddress" value="<%= node.ipAddress %>" class="w-full border border-gray-300 rounded-lg p-2" required>
+        </div>
+
+        <div class="mb-4">
+            <label for="status" class="block text-gray-700 font-medium mb-2">Status</label>
+            <select id="status" name="status" class="w-full border border-gray-300 rounded-lg p-2">
+                <option value="active" <% if (node.status === 'active') { %>selected<% } %>>Active</option>
+                <option value="inactive" <% if (node.status === 'inactive') { %>selected<% } %>>Inactive</option>
+            </select>
+        </div>
+
+        <button type="submit" class="bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600">Update Node</button>
+    </form>
+
+</body>
+</html>

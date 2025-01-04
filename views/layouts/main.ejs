@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Proxmox Admin Panel</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 font-sans">
+    <nav class="bg-white shadow-md p-4">
+        <div class="container mx-auto flex justify-between items-center">
+            <a href="/" class="text-lg font-bold text-gray-800">Proxmox Admin Panel</a>
+            <div>
+                <a href="/dashboard" class="text-gray-800 hover:text-gray-600">Dashboard</a>
+                <a href="/admin/nodes" class="text-gray-800 hover:text-gray-600 ml-4">Nodes</a>
+                <a href="/logout" class="text-gray-800 hover:text-gray-600 ml-4">Logout</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mx-auto p-6">
+        <%- body %>
+    </div>
+
+    <footer class="bg-gray-800 text-white text-center p-4">
+        &copy; 2025 Proxmox Admin Panel
+    </footer>
+</body>
+</html>
