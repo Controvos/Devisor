@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
 
-
 const ServerSchema = new mongoose.Schema({
   serverName: {
     type: String,
@@ -19,13 +18,22 @@ const ServerSchema = new mongoose.Schema({
   },
   status: {
     type: String,
-    enum: ['active', 'suspended', 'terminated'],
+    enum: ['active', 'suspended', 'terminated', 'installing', 'ready', 'failed'],
     default: 'active',
   },
   ipAddress: {
     type: String,
     required: true,
     unique: true,
+  },
+  dockerContainerId: {
+    type: String,
+    default: null,
+  },
+  dockerContainerState: {
+    type: String,
+    enum: ['UNKNOWN', 'INSTALLING', 'READY', 'FAILED'],
+    default: 'UNKNOWN',
   },
   createdAt: {
     type: Date,

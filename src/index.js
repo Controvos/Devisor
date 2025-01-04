@@ -99,47 +99,51 @@ app.get('/logout', (req, res) => {
 app.post('/instances/create', async (req, res) => {
     try {
         const { Image, Id, Cmd, Env, Ports, Scripts, Memory, Cpu, PortBindings, variables } = req.body;
-        const response = await axios.post('http://your-daemon-url/instances/create', {
+        const response = await axios.post('http://your-external-server-url/instances/create', {
             Image, Id, Cmd, Env, Ports, Scripts, Memory, Cpu, PortBindings, variables
         });
-        res.status(202).json(response.data); // Send response from daemon
+        res.status(202).json(response.data); // Send response from external server
     } catch (error) {
         res.status(500).json({ message: 'Failed to create container', error: error.message });
     }
 });
 
+
 app.get('/state/:volumeId', async (req, res) => {
     try {
         const { volumeId } = req.params;
-        const response = await axios.get(`http://your-daemon-url/state/${volumeId}`);
-        res.status(200).json(response.data); // Send state from daemon
+        const response = await axios.get(`http://your-external-server-url/state/${volumeId}`);
+        res.status(200).json(response.data); 
     } catch (error) {
         res.status(500).json({ message: 'Failed to get container state', error: error.message });
     }
 });
 
+
 app.put('/instances/edit/:id', async (req, res) => {
     try {
         const { id } = req.params;
         const { Image, Memory, Cpu, VolumeId } = req.body;
-        const response = await axios.put(`http://your-daemon-url/instances/edit/${id}`, {
+        const response = await axios.put(`http://your-external-server-url/instances/edit/${id}`, {
             Image, Memory, Cpu, VolumeId
         });
-        res.status(200).json(response.data); // Send response from daemon
+        res.status(200).json(response.data); // Send response from external server
     } catch (error) {
         res.status(500).json({ message: 'Failed to edit container', error: error.message });
     }
 });
 
+
 app.delete('/instances/:id', async (req, res) => {
     try {
         const { id } = req.params;
-        const response = await axios.delete(`http://your-daemon-url/instances/${id}`);
-        res.status(200).json(response.data); // Send response from daemon
+        const response = await axios.delete(`http://your-external-server-url/instances/${id}`);
+        res.status(200).json(response.data); // Send response from external server
     } catch (error) {
         res.status(500).json({ message: 'Failed to delete container', error: error.message });
     }
 });
+
 
 app.listen(PORT, () => {
     console.log(`Server running on http://localhost:${PORT}`);
