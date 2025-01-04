@@ -8,6 +8,7 @@ const axios = require('axios');
 ////////////////////////////////
 const User = require('./db/models/User');
 const Instance = require('./db/models/Server');
+const Node = require('./db/models/Nodes');
 
 const app = express();
 const PORT = 3000;
@@ -192,6 +193,73 @@ app.delete('/instances/:id', async (req, res) => {
     } catch (error) {
         res.status(500).json({ message: 'Failed to delete container', error: error.message });
     }
+});
+
+//////////////////////////////////////////////////////////////
+// Node Management - Admin Area
+app.get('/admin/nodes', async (req, res) => {
+  if (!req.session.user || req.session.user.role !== 'admin') {
+      return res.redirect('/login'); 
+  }
+  const nodes = await Node.find(); 
+  res.render('admin/nodes/index', { nodes });
+});
+
+app.get('/admin/nodes/add', (req, res) => {
+  if (!req.session.user || req.session.user.role !== 'admin') {
+      return res.redirect('/login'); // Ensure only admins can access this
+  }
+  res.render('admin/nodes/add'); // Render the add node form
+});
+
+app.post('/admin/nodes/add', async (req, res) => {
+  try {
+      const { name, ipAddress, status } = req.body;
+      const node = new Node({ name, ipAddress, status });
+      await node.save(); // Save the new node
+      res.redirect('/admin/nodes'); 
+  } catch (error) {
+      console.error('Error adding node:', error);
+      res.status(500).render('admin/nodes/add', { message: 'Error adding node' });
+  }
+});
+
+app.get('/admin/nodes/edit/:id', async (req, res) => {
+  if (!req.session.user || req.session.user.role !== 'admin') {
+      return res.redirect('/login'); // Ensure only admins can access this
+  }
+  const node = await Node.findById(req.params.id);
+  if (!node) {
+      return res.status(404).render('admin/nodes', { message: 'Node not found' });
+  }
+  res.render('admin/nodes/edit', { node });
+});
+
+app.post('/admin/nodes/edit/:id', async (req, res) => {
+  try {
+      const { name, ipAddress, status } = req.body;
+      const updatedNode = await Node.findByIdAndUpdate(req.params.id, { name, ipAddress, status }, { new: true });
+      if (!updatedNode) {
+          return res.status(404).render('admin/nodes/edit', { message: 'Node not found' });
+      }
+      res.redirect('/admin/nodes'); // Redirect to node list
+  } catch (error) {
+      console.error('Error updating node:', error);
+      res.status(500).render('admin/nodes/edit', { message: 'Error updating node' });
+  }
+});
+
+app.get('/admin/nodes/delete/:id', async (req, res) => {
+  try {
+      const deletedNode = await Node.findByIdAndDelete(req.params.id);
+      if (!deletedNode) {
+          return res.status(404).redirect('/admin/nodes'); // Redirect if node not found
+      }
+      res.redirect('/admin/nodes'); // Redirect to node list
+  } catch (error) {
+      console.error('Error deleting node:', error);
+      res.status(500).redirect('/admin/nodes');
+  }
 });
 
 
