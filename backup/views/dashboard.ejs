@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="/dashboard.js"></script>
+</head>
+<body class="bg-gray-100">
+
+    <div class="container mx-auto p-6">
+        <h1 class="text-2xl font-bold mb-4">Welcome, <%= req.session.user.username %></h1>
+        <h2 class="text-xl font-semibold mb-4">Manage Instances</h2>
+
+        <!-- Create Instance Form -->
+        <form id="create-instance-form" class="space-y-4 bg-white p-6 rounded-lg shadow-md">
+            <h3 class="text-lg font-medium">Create New Instance</h3>
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label for="Image" class="block text-sm font-medium">Image:</label>
+                    <input type="text" id="Image" name="Image" required class="mt-1 p-2 border border-gray-300 rounded-lg w-full">
+                </div>
+                <div>
+                    <label for="Id" class="block text-sm font-medium">ID:</label>
+                    <input type="text" id="Id" name="Id" required class="mt-1 p-2 border border-gray-300 rounded-lg w-full">
+                </div>
+            </div>
+            <div>
+                <label for="Cmd" class="block text-sm font-medium">Command:</label>
+                <input type="text" id="Cmd" name="Cmd" required class="mt-1 p-2 border border-gray-300 rounded-lg w-full">
+            </div>
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label for="Memory" class="block text-sm font-medium">Memory:</label>
+                    <input type="number" id="Memory" name="Memory" required class="mt-1 p-2 border border-gray-300 rounded-lg w-full">
+                </div>
+                <div>
+                    <label for="Cpu" class="block text-sm font-medium">CPU:</label>
+                    <input type="number" id="Cpu" name="Cpu" required class="mt-1 p-2 border border-gray-300 rounded-lg w-full">
+                </div>
+            </div>
+            <button type="submit" class="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Create Instance</button>
+        </form>
+
+        <!-- Display Instances -->
+        <h3 class="text-lg font-medium mt-8">Current Instances</h3>
+        <div id="instances-list" class="mt-4 space-y-4">
+            <% if (instances && instances.length) { %>
+                <ul class="divide-y divide-gray-200">
+                    <% instances.forEach(instance => { %>
+                        <li class="flex justify-between items-center bg-white p-4 rounded-lg shadow-sm">
+                            <div>
+                                <strong>ID:</strong> <%= instance.Id %><br>
+                                <strong>Image:</strong> <%= instance.Image %><br>
+                                <strong>Status:</strong> <%= instance.Status %>
+                            </div>
+                            <div>
+                                <button class="edit-btn bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-1 px-3 rounded" data-id="<%= instance.Id %>">Edit</button>
+                                <button class="delete-btn bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-3 rounded" data-id="<%= instance.Id %>">Delete</button>
+                            </div>
+                        </li>
+                    <% }) %>
+                </ul>
+            <% } else { %>
+                <p class="text-gray-500">No instances found.</p>
+            <% } %>
+        </div>
+
+        <!-- Edit Instance Modal -->
+        <div id="edit-instance-modal" class="hidden mt-8">
+            <h3 class="text-lg font-medium">Edit Instance</h3>
+            <form id="edit-instance-form" class="mt-4 space-y-4 bg-white p-6 rounded-lg shadow-md">
+                <input type="hidden" id="edit-id" name="id">
+                <div>
+                    <label for="edit-Image" class="block text-sm font-medium">Image:</label>
+                    <input type="text" id="edit-Image" name="Image" required class="mt-1 p-2 border border-gray-300 rounded-lg w-full">
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label for="edit-Memory" class="block text-sm font-medium">Memory:</label>
+                        <input type="number" id="edit-Memory" name="Memory" required class="mt-1 p-2 border border-gray-300 rounded-lg w-full">
+                    </div>
+                    <div>
+                        <label for="edit-Cpu" class="block text-sm font-medium">CPU:</label>
+                        <input type="number" id="edit-Cpu" name="Cpu" required class="mt-1 p-2 border border-gray-300 rounded-lg w-full">
+                    </div>
+                </div>
+                <button type="submit" class="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Save Changes</button>
+                <button type="button" id="cancel-edit" class="w-full bg-gray-300 hover:bg-gray-400 text-gray-700 font-bold py-2 px-4 rounded">Cancel</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="/dashboard.js"></script>
+</body>
+</html>

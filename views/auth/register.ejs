@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Register - Devisor</title>
+  <!-- Tailwind CSS CDN -->
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss-dark-mode@0.3.2/dist/tailwind-darkmode.css" rel="stylesheet">
+</head>
+<body class="bg-gray-900 text-white">
+  <div class="min-h-screen flex items-center justify-center">
+    <div class="w-full max-w-md p-6 bg-gray-800 rounded-lg shadow-md">
+      <h2 class="text-2xl font-bold mb-6 text-center">Register</h2>
+      
+      <form action="/register" method="POST" class="space-y-4">
+        <div>
+          <label for="username" class="block text-sm font-medium">Username</label>
+          <input type="text" name="username" id="username" required class="mt-1 block w-full p-2 border rounded bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500">
+        </div>
+
+        <div>
+          <label for="email" class="block text-sm font-medium">Email</label>
+          <input type="email" name="email" id="email" required class="mt-1 block w-full p-2 border rounded bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500">
+        </div>
+
+        <div>
+          <label for="password" class="block text-sm font-medium">Password</label>
+          <input type="password" name="password" id="password" required class="mt-1 block w-full p-2 border rounded bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500">
+        </div>
+
+        <div>
+          <label for="confirmPassword" class="block text-sm font-medium">Confirm Password</label>
+          <input type="password" name="confirmPassword" id="confirmPassword" required class="mt-1 block w-full p-2 border rounded bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500">
+        </div>
+
+        <div>
+          <button type="submit" class="w-full bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+            Register
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</body>
+</html>
