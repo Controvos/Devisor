@@ -5,7 +5,7 @@ const User = require('./db/models/User');
 // Database connection
 async function connectDB() {
     try {
-        await mongoose.connect('mongodb+srv://mainuser:Allexander01@cluster0.3owwf.mongodb.net/testmongodbformygamepanel?retryWrites=true&w=majority&appName=Cluster0', {
+        await mongoose.connect('', {
             useNewUrlParser: true,
             useUnifiedTopology: true
         });
