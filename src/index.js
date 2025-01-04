@@ -1,14 +1,20 @@
 const express = require('express');
 const connectDB = require('./db/db');
-const User = require('./db/models/User');
 const bcrypt = require('bcryptjs'); 
 const path = require('path');
 const session = require('express-session');
 const axios = require('axios');
 
+////////////////////////////////
+const User = require('./db/models/User');
+const Instance = require('./db/models/Server');
+
 const app = express();
 const PORT = 3000;
 
+///////////////////////////////
+
+///////////////////////////////
 app.use(express.json());
 app.use(express.urlencoded({ extended: true })); 
 connectDB();
@@ -77,12 +83,56 @@ app.post('/login', async (req, res) => {
 });
 
 // Dashboard route
-app.get('/dashboard', (req, res) => {
-    if (!req.session.user) {
+app.get('/dashboard', async (req, res) => {
+  if (!req.session.user) {
       return res.redirect('/login'); 
-    }
-    res.render('dashboard', { req }); 
+  }
+
+  try {
+      // Fetch instances related to the logged-in user
+      const instances = await Instance.find({ userId: req.session.user._id });
+      res.render('dashboard', { user: req.session.user, instances, req });
+  } catch (error) {
+      console.error('Error fetching instances:', error);
+      res.status(500).send('Internal Server Error');
+  }
 });
+
+
+app.post('/update-settings', async (req, res) => {
+  try {
+      if (!req.session.user) {
+          return res.redirect('/login'); 
+      }
+
+      const { username, email, password } = req.body;
+
+      // Validate and update user information
+      const userUpdates = {};
+      if (username) userUpdates.username = username;
+      if (email) userUpdates.email = email;
+      if (password) userUpdates.password = await bcrypt.hash(password, 10); // Hash password if updated
+
+      await User.findByIdAndUpdate(req.session.user._id, userUpdates);
+
+      req.session.user = await User.findById(req.session.user._id); // Update session user
+
+      res.redirect('/settings'); // Redirect back to settings with success message
+  } catch (err) {
+      console.error('Error updating settings:', err);
+      res.status(500).render('settings', { message: 'An error occurred while updating your settings.' });
+  }
+});
+
+
+// Settings Route
+app.get('/settings', (req, res) => {
+  if (!req.session.user) {
+      return res.redirect('/login'); 
+  }
+  res.render('user/settings', { user: req.session.user, currentPage: 'settings' }); 
+});
+
 
 // Logout route
 app.get('/logout', (req, res) => {
