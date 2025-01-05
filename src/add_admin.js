@@ -5,7 +5,7 @@ const User = require('./db/models/User');
 // Database connection
 async function connectDB() {
     try {
-        await mongoose.connect('', {
+        await mongoose.connect('//', { // Add to env soon.
             useNewUrlParser: true,
             useUnifiedTopology: true
         });
