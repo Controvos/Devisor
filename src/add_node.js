@@ -2,8 +2,7 @@ const mongoose = require("mongoose");
 const Node = require("./db/models/Nodes");
 
 // MongoDB connection URI
-const mongoURI =
-  "mongodb+srv://mainuser:Allexander01@cluster0.3owwf.mongodb.net/testmongodbformygamepanel?retryWrites=true&w=majority&appName=Cluster0";
+const mongoURI = "";
 
 // Function to add a new node
 async function addNode(nodeData) {

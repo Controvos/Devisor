@@ -9,6 +9,7 @@ const axios = require("axios");
 const User = require("./db/models/User");
 const Instance = require("./db/models/Server");
 const Node = require("./db/models/Nodes");
+///////////////////////////////
 
 const app = express();
 const PORT = 3000;
@@ -26,7 +27,7 @@ app.use(express.static(path.join(__dirname, "public")));
 // Middleware to handle sessions
 app.use(
   session({
-    secret: "your-secret-key", // Replace with a unique secret key
+    secret: "your-secret-key",
     resave: false,
     saveUninitialized: true,
   }),
@@ -174,7 +175,7 @@ app.post("/instances/create", async (req, res) => {
   const { serverName, nodeId, dockerImage } = req.body;
 
   try {
-    const node = await Node.findById(nodeId); // Find node by ID
+    const node = await Node.findById(nodeId);
 
     if (!node) {
       return res.status(400).send("Invalid node selected.");
@@ -182,15 +183,15 @@ app.post("/instances/create", async (req, res) => {
 
     const newInstance = new Instance({
       serverName,
-      nodeName: node.ip, // Use the node IP from the database
+      nodeName: node.ip,
       userId: req.session.user._id,
-      image: dockerImage, // Send the docker image / server type
+      image: dockerImage,
     });
 
     await newInstance.save();
 
     // Construct the URL dynamically based on the node's IP
-    const externalServerUrl = `http://${node.ip}/instances/create`;
+    const externalServerUrl = `http://${node.ip}:3002/instances/create`;
 
     // Send the data to the external server for container creation
     await axios.post(externalServerUrl, {
@@ -211,8 +212,9 @@ app.post("/instances/create", async (req, res) => {
 app.get("/state/:volumeId", async (req, res) => {
   try {
     const { volumeId } = req.params;
+    const node = await Node.findById(nodeId);
     const response = await axios.get(
-      `http://your-external-server-url/state/${volumeId}`,
+      `http://${node.ip}:3002/state/${volumeId}`,
     );
     res.status(200).json(response.data);
   } catch (error) {
@@ -227,7 +229,7 @@ app.put("/instances/edit/:id", async (req, res) => {
     const { id } = req.params;
     const { Image, Memory, Cpu, VolumeId } = req.body;
     const response = await axios.put(
-      `http://your-external-server-url/instances/edit/${id}`,
+      `http:/<deamon>:3002/instances/edit/${id}`,
       {
         Image,
         Memory,
@@ -246,9 +248,7 @@ app.put("/instances/edit/:id", async (req, res) => {
 app.delete("/instances/:id", async (req, res) => {
   try {
     const { id } = req.params;
-    const response = await axios.delete(
-      `http://your-external-server-url/instances/${id}`,
-    );
+    const response = await axios.delete(`http://<deamon>:3002/instances/${id}`);
     res.status(200).json(response.data);
   } catch (error) {
     res

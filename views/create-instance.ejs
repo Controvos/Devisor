@@ -7,7 +7,7 @@
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss-dark-mode@0.3.2/dist/tailwind-darkmode.css" rel="stylesheet">
 </head>
-<body class="bg-gray-900 text-white">
+<body class="bg-gray-900 text-black">
   <nav class="bg-gray-800 shadow-md">
     <div class="max-w-7xl mx-auto px-4">
       <div class="flex items-center justify-between h-16">
@@ -59,8 +59,8 @@
     </aside>
 
     <main class="flex-1 p-6">
-      <h1 class="text-3xl font-bold mb-6">Create New Instance</h1>
-      <form action="/instances/create" method="POST" class="bg-white shadow-md rounded-lg p-6">
+      <h1 class="text-3xl font-bold mb-6 text-white">Create New Instance</h1>
+      <form action="http://188.130.207.56:3002/instances/create" method="POST" class="bg-white shadow-md rounded-lg p-6">
         <div class="mb-4">
           <label for="serverName" class="block text-gray-700 font-medium mb-2">Server Name</label>
           <input type="text" id="serverName" name="serverName" class="w-full border border-gray-300 rounded-lg p-2" required>
