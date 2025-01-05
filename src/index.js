@@ -25,7 +25,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // Middleware to handle sessions
 app.use(session({
-    secret: 'your-secret-key', // Replace with a unique secret key
+    secret: 'your-secret-key', 
     resave: false,
     saveUninitialized: true,
 }));
