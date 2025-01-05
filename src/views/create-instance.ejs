@@ -3,17 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Game Hosting Panel - Devisor</title>
+  <title>Create New Instance - Devisor</title>
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss-dark-mode@0.3.2/dist/tailwind-darkmode.css" rel="stylesheet">
-  <link rel="stylesheet" href="/path/to/your/custom-styles.css"> <!-- Add your custom styles URL here -->
-  <style>
-    /* Override input styles to ensure better contrast */
-    input, textarea, select {
-      background-color: #1a202c; /* Dark background for better visibility */
-      color: white; /* Ensure text is visible */
-    }
-  </style>
 </head>
 <body class="bg-gray-900 text-white">
   <nav class="bg-gray-800 shadow-md">
@@ -25,9 +17,9 @@
           </div>
           <div class="hidden md:block">
             <div class="ml-10 flex items-baseline space-x-4">
-              <a href="/" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium" aria-current="page">Dashboard</a>
-              <a href="/dashboard" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Instances</a>
-              <a href="/settings" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Settings</a>
+              <a href="/dashboard" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium" aria-current="page">Dashboard</a>
+              <a href="/instances" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Instances</a>
+              <a href="/settings" class="text-gray-300 hover:bg-gray-700 hover:text-white px-2 py-2 rounded-md text-sm font-medium">Settings</a>
               <a href="/logout" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Logout</a>
             </div>
           </div>
@@ -60,15 +52,6 @@
                 </svg>
                 Logout
               </a>
-              <!-- Conditionally Render "Manage Nodes" if admin -->
-              <% if (user.role === 'admin') { %>
-                <a href="/admin/nodes/manage" class="bg-gray-900 text-white group flex items-center px-2 py-2 text-sm font-medium rounded-md">
-                  <svg class="mr-3 h-6 w-6 text-gray-400 group-hover:text-gray-300" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-3 3h3m-3-6h-3m0 6h-3" />
-                  </svg>
-                  Manage Nodes
-                </a>
-              <% } %>
             </div>
           </nav>
         </div>
@@ -76,35 +59,37 @@
     </aside>
 
     <main class="flex-1 p-6">
-      <h1 class="text-3xl font-bold mb-6">Welcome, <%= req.session.user.username %>!</h1>
-      
-      <% if (user.role === 'admin') { %>
-        <!-- Show the Add Node Form if the user is admin -->
-        <h1 class="text-2xl font-bold mb-4">Add Node</h1>
-        <form action="/admin/nodes/add" method="POST" class="bg-white shadow-md rounded-lg p-6">
-          <div class="mb-4">
-            <label for="name" class="block text-gray-700 font-medium mb-2">Node Name</label>
-            <input type="text" id="name" name="name" class="w-full border border-gray-300 rounded-lg p-2" required>
-          </div>
+      <h1 class="text-3xl font-bold mb-6">Create New Instance</h1>
+      <form action="/instances/create" method="POST" class="bg-white shadow-md rounded-lg p-6">
+        <div class="mb-4">
+          <label for="serverName" class="block text-gray-700 font-medium mb-2">Server Name</label>
+          <input type="text" id="serverName" name="serverName" class="w-full border border-gray-300 rounded-lg p-2" required>
+        </div>
 
-          <div class="mb-4">
-            <label for="ipAddress" class="block text-gray-700 font-medium mb-2">IP Address</label>
-            <input type="text" id="ipAddress" name="ipAddress" class="w-full border border-gray-300 rounded-lg p-2" required>
-          </div>
+        <div class="mb-4">
+          <label for="serverImage" class="block text-gray-700 font-medium mb-2">Docker Image</label>
+          <select id="serverImage" name="serverImage" class="w-full border border-gray-300 rounded-lg p-2" required>
+            <option value="nginx:latest">Nginx</option>
+            <option value="mysql:latest">MySQL</option>
+            <option value="redis:latest">Redis</option>
+            <option value="wordpress:latest">WordPress</option>
+            <option value="alpine:latest">Alpine</option>
+            <!-- Add more Docker images as needed -->
+          </select>
+        </div>
 
-          <div class="mb-4">
-            <label for="status" class="block text-gray-700 font-medium mb-2">Status</label>
-            <select id="status" name="status" class="w-full border border-gray-300 rounded-lg p-2">
-              <option value="active">Active</option>
-              <option value="inactive">Inactive</option>
-            </select>
-          </div>
+        <div class="mb-4">
+          <label for="nodeName" class="block text-gray-700 font-medium mb-2">Node Name</label>
+          <select id="nodeName" name="nodeName" class="w-full border border-gray-300 rounded-lg p-2" required>
+            <!-- Options populated dynamically from your available nodes -->
+            <% nodes.forEach(node => { %>
+              <option value="<%= node.name %>"><%= node.name %></option>
+            <% }) %>
+          </select>
+        </div>
 
-          <button type="submit" class="bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600">Add Node</button>
-        </form>
-      <% } else { %>
-        <p>You do not have permission to manage nodes.</p>
-      <% } %>
+        <button type="submit" class="bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600">Create Instance</button>
+      </form>
     </main>
   </div>
 </body>
